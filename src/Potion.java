@@ -6,6 +6,7 @@ public class Potion extends Item {
         super(info[0],info[1],Integer.parseInt(info[2]), Integer.parseInt(info[3]));
         increase = Integer.parseInt(info[4]);
         effect = info[5];
+        setType("Potions");
     }
 
     public int getIncrease() {

@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Bag {
     private final ArrayList<Item>[] items = new ArrayList[4];
     private static HashMap<String, Integer> itemId = new HashMap<>();
-    private static String[] reverseId = new String[]{"Armor", "Potion", "Spell", "Weapon"};
+    private static String[] reverseId = new String[]{"Armory", "Potions", "Spell", "Weaponry"};
     private static int DEFAULT_SIZE = 20;
     private static int MAX_SIZE = 40;
     private int volume = DEFAULT_SIZE;
@@ -14,13 +14,13 @@ public class Bag {
     private Hero hero;
 
     static {
-        itemId.put("Armor", 0);
-        itemId.put("Potion", 1);
+        itemId.put("Armory", 0);
+        itemId.put("Potions", 1);
         itemId.put("Spell", 2);
-        itemId.put("Weapon", 3);
-        itemId.put("IceSpell", 2);
-        itemId.put("LightningSpell", 2);
-        itemId.put("FireSpell", 2);
+        itemId.put("Weaponry", 3);
+        itemId.put("IceSpells", 2);
+        itemId.put("LightningSpells", 2);
+        itemId.put("FireSpells", 2);
     }
 
     public Bag(Hero hero) {
@@ -109,20 +109,20 @@ public class Bag {
         System.out.printf("%s%s's bag. Volume: %d/%d%s\n",
                 MyFont.ANSI_BACKGROUNDWHITE, hero.toString(), used, volume, MyFont.ANSI_RESET);
         int start = 0;
-        if (items[itemId.get("Armor")].size() > 0){
+        if (items[itemId.get("Armory")].size() > 0){
             showArmor(start);
         }
-        start += items[itemId.get("Armor")].size();
-        if (items[itemId.get("Potion")].size() > 0) {
+        start += items[itemId.get("Armory")].size();
+        if (items[itemId.get("Potions")].size() > 0) {
             showPotion(start);
         }
-        start += items[itemId.get("Potion")].size();
+        start += items[itemId.get("Potions")].size();
         if (items[itemId.get("Spell")].size() > 0) {
             showSpell(start);
         }
 
         start += items[itemId.get("Spell")].size();
-        if (items[itemId.get("Weapon")].size() > 0) {
+        if (items[itemId.get("Weaponry")].size() > 0) {
             showWeapon(start);
         }
     }
@@ -140,16 +140,16 @@ public class Bag {
     }
 
     public void showPotion(int start){
-        printUtil.printObjectInfoTableWithId("Potion", items[itemId.get("Potion")], start, "ItemName",  "Type","Cost","Lv","+++","Attribute");
+        printUtil.printObjectInfoTableWithId("Potions", items[itemId.get("Potions")], start, "ItemName",  "Type","Cost","Lv","+++","Attribute");
 
     }
 
     public void showArmor(int start){
-        printUtil.printObjectInfoTableWithId("Armor", items[itemId.get("Armor")], start, "ItemName", "Type","Cost","Lv","damage--");
+        printUtil.printObjectInfoTableWithId("Armory", items[itemId.get("Armory")], start, "ItemName", "Type","Cost","Lv","damage--");
     }
 
     public void showWeapon(int start){
-        printUtil.printObjectInfoTableWithId("Weapon", items[itemId.get("Weapon")], start, "ItemName", "Type", "Cost","Lv","Damage", "Hand");
+        printUtil.printObjectInfoTableWithId("Weaponry", items[itemId.get("Weaponry")], start, "ItemName", "Type", "Cost","Lv","Damage", "Hand");
     }
 
     public boolean canUseSpell(){

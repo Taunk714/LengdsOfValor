@@ -34,16 +34,16 @@ public class Hero extends Character implements Fight{
     // ask and get item of a specific type.
     public void useItem(String type){
         switch (type){
-            case "Armor"->{
+            case "Armory"->{
                 bag.showArmor(0);
             }
             case "Spell"->{
                 bag.showSpell(0);
             }
-            case "Weapon"->{
+            case "Weaponry"->{
                 bag.showWeapon(0);
             }
-            case "Potion"->{
+            case "Potions"->{
                 bag.showPotion(0);
             }
         }
@@ -80,11 +80,11 @@ public class Hero extends Character implements Fight{
                 Scanner scanner = new Scanner(System.in);
                 ans = scanner.next("[0-"+(size-1)+"mqi]");
                 if (ans.equalsIgnoreCase("i")){
-                    Legends.getInstance().showInfo();
+                    LOVGame.getInstance().showInfo();
                 }else if (ans.equalsIgnoreCase("m")){
-                    Legends.getInstance().printMap();
+                    LOVGame.getInstance().printMap();
                 }else if (ans.equalsIgnoreCase("q")){
-                    Legends.getInstance().printEndGame();
+                    LOVGame.getInstance().printEndGame();
                     System.exit(-1);
                 }else {
                     id = Integer.parseInt(ans);
@@ -309,30 +309,30 @@ public class Hero extends Character implements Fight{
             case 3 ->{ // use a potion
                 System.out.printf("%s use a potion\n", toString());
                 System.out.println(MyFont.ANSI_BACKGROUNDWHITE + "ԅ( ¯་། ¯ԅ)" + MyFont.ANSI_RESET);
-                useItem("Potion");
+                useItem("Potions");
             }
             case 4 ->{ // change armor
                 System.out.printf("%s wants to change the armor\n", toString());
                 System.out.println(MyFont.ANSI_BACKGROUNDWHITE + "＼(＠＾０＾＠)/" + MyFont.ANSI_RESET);
-                useItem("Armor");
+                useItem("Armory");
             }
             case 5 ->{ // change weapon
                 System.out.printf("%s wants to change the weapon\n", toString());
                 System.out.print(MyFont.ANSI_BACKGROUNDWHITE + "(҂‾ ▵‾)︻デ═一" + MyFont.ANSI_RESET);
-                useItem("Weapon");
+                useItem("Weaponry");
             }
         }
     }
 
     public void hurt(int damage){
-        Random rnd = new Random();
-        if (rnd.nextInt(100000) < agility.getValue() * 2){
+//        Random rnd = new Random();
+        if (randomUtil.nextInt(100000) < agility.getValue() * 2){
             System.out.println("Miss!ヽ(ﾟ∀ﾟ)ﾒ(ﾟ∀ﾟ)ﾉ\n");
         }else{
-            int d = (damage - getArmorBuff())/3;
+            int d = (damage - getArmorBuff()/2)/3;
             setHP(getHP()-Math.max(0, d));
-            System.out.printf("%s's HP -%d\n\n" , toString(),Math.max(0, d));
-            if (getHP() < 0){
+            System.out.printf("%s's HP -%d. Current HP: %d\n\n" , toString(),Math.max(0, d), getHP());
+            if (getHP() <= 0){
                 System.out.println(MyFont.ANSI_RED + MyFont.ANSI_BOLD + getName() +  " died." + MyFont.ANSI_RESET);
             }
         }

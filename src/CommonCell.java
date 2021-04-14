@@ -1,6 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
 
+// for Legends
 public class CommonCell implements Cell{
     private static final int battleProb;
     static {
@@ -12,9 +13,6 @@ public class CommonCell implements Cell{
         pos[0] = row;
         pos[1] = col;
     }
-
-    private Hero currentHero = null;
-    private Monster currentMonster = null;
 
     public void enter(Team<Hero> heroes){
         heroes.setPos(new int[]{pos[0],pos[1]});
@@ -48,7 +46,7 @@ public class CommonCell implements Cell{
                         boolean hasEquip = false;
                         int id = 0;
                         for (int i = 0; i < heroes.getTeamSize(); i++) {
-                            if (heroes.getMember(i).getBag().hasItem("Armor")){
+                            if (heroes.getMember(i).getBag().hasItem("Armory")){
                                 System.out.println(i+": "+heroes.getMember(i).getName());
                                 id = id * 10 + i;
                                 hasEquip = true;
@@ -79,7 +77,7 @@ public class CommonCell implements Cell{
                         boolean hasEquip = false;
                         int id = 0;
                         for (int i = 0; i < heroes.getTeamSize(); i++) {
-                            if (heroes.getMember(i).getBag().hasItem("Weapon")){
+                            if (heroes.getMember(i).getBag().hasItem("Weaponry")){
                                 System.out.println(i+": "+heroes.getMember(i).getName());
                                 id = id * 10 + i;
                                 hasEquip = true;
@@ -117,8 +115,7 @@ public class CommonCell implements Cell{
      * @return the random number.
      */
     private int rollDice(){
-        Random rnd = new Random();
-        return rnd.nextInt(100);
+        return randomUtil.nextInt(100);
     }
 
     public int[] getPos() {

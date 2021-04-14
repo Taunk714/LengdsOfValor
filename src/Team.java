@@ -62,6 +62,10 @@ public class Team<T extends Character> implements Iterable<T>{
         return teamSize;
     }
 
+    public void removeMember(T member){
+        members.remove(member);
+    }
+
     public void setMembers(List<T> members) {
         this.members = members;
     }

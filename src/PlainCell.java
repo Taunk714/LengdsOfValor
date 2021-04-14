@@ -1,4 +1,4 @@
-public class PlainCell implements Cell, AccessibleCell<Character> {
+public class PlainCell<T extends Character> implements Cell, AccessibleCell<T> {
 
     private Hero currentHero = null;
     private Monster currentMonster = null;
@@ -10,7 +10,7 @@ public class PlainCell implements Cell, AccessibleCell<Character> {
     }
 
     @Override
-    public void enter(Character member) {
+    public void enter(T member) {
         if (member instanceof Hero){
             setHero((Hero) member);
             member.setPos(pos);

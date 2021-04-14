@@ -16,9 +16,8 @@ public class MonsterCreator{
     }
 
     public static Monster createMonsterByLevel(int level){
-        Random rnd = new Random();
         ArrayList<String[]> monsters = monsterListByLevel.get(level);
-        String[] target = monsters.get(rnd.nextInt(monsters.size()));
+        String[] target = monsters.get(randomUtil.nextInt(monsters.size()));
         switch (target[0]){
             case "Dragon"->{
                 return new Dragon(target);

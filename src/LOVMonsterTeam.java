@@ -5,4 +5,8 @@ public class LOVMonsterTeam extends Team<Monster>{
         super();
     }
 
+    public void removeDead(Monster monster){
+        removeMember(monster);
+    }
+
 }

@@ -9,7 +9,8 @@ public abstract class Item implements Serializable, Buy, Sell, Tablefiable {
     private int endurance ;
     private Hero hero;
 
-    public Item(String name, String type,int cost, int level, int endurance) {
+
+    public Item(String type,String name, int cost, int level, int endurance) {
         this.cost = cost;
         this.level = level;
         this.name = name;
@@ -17,8 +18,8 @@ public abstract class Item implements Serializable, Buy, Sell, Tablefiable {
         this.type = type;
     }
 
-    public Item(String name, String type, int cost, int level) {
-        this(name, type, cost, level, 1);
+    public Item(String type,String name,  int cost, int level) {
+        this(type,name,  cost, level, 1);
     }
 
     public abstract void use();
@@ -41,6 +42,10 @@ public abstract class Item implements Serializable, Buy, Sell, Tablefiable {
 
     public int getLevel() {
         return level;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getName() {

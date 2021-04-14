@@ -44,6 +44,11 @@ public class LOVGame implements RpgGame {
 
     @Override
     public void start() throws InterruptedException {
+        for (Hero hero : heroes) {
+            System.out.println("Starting From Nexus cell! Come and Buy your first Item!");
+            lovGrid.enter(hero, hero.getPos());
+        }
+
         while (true){
             if (round % 8 == 0){
                 generateNewMonster();
@@ -217,7 +222,7 @@ public class LOVGame implements RpgGame {
                     available = available * 10 + 2;
                 }
 
-                if (!hero.getBag().hasItem("Potion")){
+                if (!hero.getBag().hasItem("Potions")){
                     System.out.print(MyFont.ANSI_DELETE);
                     System.out.print("3: use a potion. ");
                     System.out.print(MyFont.ANSI_RESET);
@@ -228,7 +233,7 @@ public class LOVGame implements RpgGame {
                     available = available * 10 + 3;
                 }
 
-                if (!hero.getBag().hasItem("Armor")){
+                if (!hero.getBag().hasItem("Armory")){
                     System.out.print(MyFont.ANSI_DELETE);
                     System.out.print("4: change your armor. ");
                     System.out.print(MyFont.ANSI_RESET);
@@ -239,7 +244,7 @@ public class LOVGame implements RpgGame {
                     available = available * 10 + 4;
                 }
 
-                if (!hero.getBag().hasItem("Weapon")){
+                if (!hero.getBag().hasItem("Weaponry")){
                     System.out.print(MyFont.ANSI_DELETE);
                     System.out.print("5: change your weapon. ");
                     System.out.print(MyFont.ANSI_RESET);
@@ -265,6 +270,10 @@ public class LOVGame implements RpgGame {
             int index = askAttackTarget(targets);
             Monster target = targets.get(index);
             hero.attack(target, ans);
+            if (isTargetDead(target)){
+                System.out.printf("Monster %s is dead! You are close to victory!\n", target.getName());
+                monsters.removeDead(target);
+            }
         }else{
             hero.attack(null, ans);
         }
@@ -275,7 +284,7 @@ public class LOVGame implements RpgGame {
         // and armors
         // print Hero Info
         printUtil.printObjectInfoTableWithId("Heroes", heroes.getMembers(),
-                0, "Occupation", "Name","Lv","HP","Mana", "EXP","Money", "Strength", "Agility", "Dexterity", "Weapon","Armor");
+                0, "Occupation", "Name","Lv","HP","Mana", "EXP","Money", "Strength", "Agility", "Dexterity", "Weaponry","Armory");
 
     }
 
@@ -291,6 +300,9 @@ public class LOVGame implements RpgGame {
         ArrayList<Monster> targets = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
+                if (pos[0]-i < 0 || pos[1]+j-1 < 0 || pos[1]+j-1 > lovGrid.getSize()-1){
+                    continue;
+                }
                 Cell cell = lovGrid.getCell(pos[0]-i, pos[1]+j-1);
                 if (cell instanceof AccessibleCell && ((AccessibleCell) cell).getMonster()!= null){
                     targets.add(((AccessibleCell) cell).getMonster());
@@ -309,7 +321,8 @@ public class LOVGame implements RpgGame {
                 Scanner scanner = new Scanner(System.in);
                 ans = scanner.next("[0-"+ (monsters.size()-1) +"qmi]");
                 if (ans.equalsIgnoreCase("q")){
-                    showHeroInfo();
+                    printEndGame();
+                    System.exit(-1);
                 }else if (ans.equalsIgnoreCase("m")) {
                     Legends.getInstance().printMap();
                 }else if (ans.equalsIgnoreCase("i")){
@@ -423,7 +436,7 @@ public class LOVGame implements RpgGame {
         //        more specifically their hp, their level, their mana, their current exp, their money
 //        and their skill levels
         printUtil.printObjectInfoTableWithId("INFORMATION", heroes.getMembers(),0,
-                "Type", "Name","Lv","HP","Mana", "EXP","Money", "Strength", "Agility", "Dexterity", "Weapon","Armor");
+                "Type", "Name","Lv","HP","Mana", "EXP","Money", "Strength", "Agility", "Dexterity", "Weaponry","Armory");
         printUtil.printObjectInfoTableWithId("Monsters", monsters.getMembers(),
                 0, "Type", "Name","Lv","HP","Defense", "Damage");
     }
@@ -465,9 +478,11 @@ public class LOVGame implements RpgGame {
         System.out.println(s);
     }
 
+    private boolean isTargetDead(Character character){
+        return character.getHP() <= 0;
+    }
 
     public void printEndGame(){
         System.out.println("Adventure ends.");
     }
-
 }

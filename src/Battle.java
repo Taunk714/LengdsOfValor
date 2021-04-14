@@ -135,7 +135,7 @@ public class Battle {
                     available = available * 10 + 2;
                 }
 
-                if (!hero.getBag().hasItem("Potion")){
+                if (!hero.getBag().hasItem("Potions")){
                     System.out.print(MyFont.ANSI_DELETE);
                     System.out.print("3: use a potion. ");
                     System.out.print(MyFont.ANSI_RESET);
@@ -146,7 +146,7 @@ public class Battle {
                     available = available * 10 + 3;
                 }
 
-                if (!hero.getBag().hasItem("Armor")){
+                if (!hero.getBag().hasItem("Armory")){
                     System.out.print(MyFont.ANSI_DELETE);
                     System.out.print("4: change your armor. ");
                     System.out.print(MyFont.ANSI_RESET);
@@ -157,7 +157,7 @@ public class Battle {
                     available = available * 10 + 4;
                 }
 
-                if (!hero.getBag().hasItem("Weapon")){
+                if (!hero.getBag().hasItem("Weaponry")){
                     System.out.print(MyFont.ANSI_DELETE);
                     System.out.print("5: change your weapon. ");
                     System.out.print(MyFont.ANSI_RESET);
@@ -221,7 +221,7 @@ public class Battle {
         // and armors
         // print Hero Info
         printUtil.printObjectInfoTableWithId("Heroes", heroes.getMembers(),
-                0, "Occupation",  "Name","Lv","HP","Mana", "EXP","Money", "Strength", "Agility", "Dexterity", "Weapon","Armor");
+                0, "Occupation",  "Name","Lv","HP","Mana", "EXP","Money", "Strength", "Agility", "Dexterity", "Weaponry","Armory");
 
     }
 

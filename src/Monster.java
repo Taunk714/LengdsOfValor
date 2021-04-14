@@ -52,14 +52,14 @@ public class Monster extends Character implements Fight{
 
     // get hurt by others.
     public void hurt(int damage){
-        Random rnd = new Random();
-        if (rnd.nextInt(100) < dodgeChance * dcDebuff){
+//        Random rnd = new Random();
+        if (randomUtil.nextInt(100) < dodgeChance * dcDebuff){
             System.out.println("Miss!ヽ(ﾟ∀ﾟ)ﾒ(ﾟ∀ﾟ)ﾉ");
         }else{
             int d = (int) ((damage - defense*defenseDebuff)*0.5);
             setHP(getHP()-d);
-            System.out.println(toString() + "'s HP -" + d +"\n");
-            if (getHP() < 0){
+            System.out.printf("%s 's HP -%s. Current HP: %d\n\n", toString(),d, getHP());
+            if (getHP() <= 0){
                 System.out.println(MyFont.ANSI_RED + MyFont.ANSI_BOLD + toString() +  " died."+MyFont.ANSI_RESET);
             }
         }

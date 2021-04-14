@@ -4,6 +4,8 @@ public class Armor extends Item {
     public Armor(String[] info) {
         super(info[0],info[1],Integer.parseInt(info[2]), Integer.parseInt(info[3]));
         this.damageReduction = Integer.parseInt(info[4]);
+        setType("Armory");
+
     }
 
     @Override
