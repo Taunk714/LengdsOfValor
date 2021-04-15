@@ -136,7 +136,7 @@ public class LOVGame implements RpgGame {
 
     private String askMovement(Hero hero){
         System.out.printf("Decide %s's next movement!(%s is in lane %s, row %d, col %d)\n",
-                hero, hero, hero.getPos()[0], hero.getPos()[1]);
+                hero, hero, laneList[hero.getPos()[1]/3], hero.getPos()[0], hero.getPos()[1]);
         String pattern = "[wsdqiWSDQIbBtT";
         if (hasSameLineMonster(hero)){
             System.out.print(MyFont.ANSI_DELETE);
@@ -397,7 +397,7 @@ public class LOVGame implements RpgGame {
                 System.out.printf("%d: Lane %s", i+1 , laneList[i]);
                 System.out.print(MyFont.ANSI_RESET);
                 System.out.print(MyFont.ANSI_GREY + MyFont.ANSI_ITALIC);
-                System.out.println("You can't teleport here because you are currently in this lane." + MyFont.ANSI_RESET);
+                System.out.println(" You can't teleport here because you are currently in this lane." + MyFont.ANSI_RESET);
             }else{
                 System.out.printf("%d: Lane %s\n", i+1, laneList[i]);
                 available = available * 10 + i+1;
@@ -418,7 +418,8 @@ public class LOVGame implements RpgGame {
         System.out.printf("%s will teleport to lane %s\n", hero, laneList[laneId]);
         int monsterRow = getMonsterRow(laneId);
         printLane(laneId,monsterRow);
-        System.out.println("Please enter the id of cell that you want to teleport(Only those cells that have number can be chosen.)");
+        System.out.println("Please enter the id of cell that you want to teleport(Only those cells that have number can be chosen.)\n" +
+                MyFont.ANSI_RED+"Input instruction: if map shows: "+MyFont.ANSI_BOLD + "6,7, please enter 67"+MyFont.ANSI_RESET);
         while (true){
             try {
                 String s = scannerUtil.readLine();
@@ -499,12 +500,12 @@ public class LOVGame implements RpgGame {
         System.out.println("""
                 Welcome to the Legends Of Valor!
                 You are in the Legends world. There are several types of area in the world.
-                Inaccessible▩▩: can't move into
-                Plain  : common area
-                Bush\u001B[42m  \u001B[0m: increase the dexterity of hero
-                Cave\u001B[44m  \u001B[0m:increase the agility of hero
-                Koulou\u001B[43m  \u001B[0m: increase the strength of hero
-                Nexus\u001B[41m  \u001B[0m\u001B[46m  \u001B[0m: where monsters and heroes are born. Hero can buy or sell item here.
+                ▩▩Inaccessible: can't move into
+                  Plain: common area
+                \u001B[42m  \u001B[0mBush: increase the dexterity of hero
+                \u001B[44m  \u001B[0mCave:increase the agility of hero
+                \u001B[43m  \u001B[0mKoulou: increase the strength of hero
+                \u001B[41m  \u001B[0m\u001B[46m  \u001B[0mNexus: where monsters and heroes are born. Hero can buy or sell item here.
                 
                 The game map is an \u001B[1m8x8\u001B[0m grid. \u001B[1m\u001B[33mcol 2 & col 5\u001B[0m are inaccessible. And therefore 
                 the map are seperated into three lanes by the inaccessible cells.
@@ -625,7 +626,7 @@ public class LOVGame implements RpgGame {
                 if (((AccessibleCell<?>) cell).getHero()!=null){
                     s.append(((AccessibleCell<?>) cell).getHero().mark());
                 }else if (((AccessibleCell<?>) cell).isExplored() && j > monsterRow) {
-                    s.append(cell.getRow()).append(cell.getCol()).append(" ");
+                    s.append(cell.getRow()).append(",").append(cell.getCol());
                 }else {
                     s.append(cell.toString());
                 }
