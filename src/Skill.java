@@ -6,6 +6,8 @@ public class Skill {
     private int value;
     private int level;
 
+    private double cellBonus = 1;
+
     public Skill(String skillName, int value, boolean isFavor) {
         this.skillName = skillName;
         this.value = value;
@@ -28,8 +30,16 @@ public class Skill {
         level++;
     }
 
+    public void setCellBonus(double bonusFactor){
+        cellBonus = bonusFactor;
+    }
+
+    public void resetCellBonus(){
+        cellBonus = 1;
+    }
+
     public int getValue() {
-        return value;
+        return (int) (value * cellBonus);
     }
 
     public void setValue(int value) {

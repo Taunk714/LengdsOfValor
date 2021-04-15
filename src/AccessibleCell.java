@@ -9,4 +9,6 @@ public interface AccessibleCell<T> {
 
     void setHeroNull();
     void setMonsterNull();
+
+    boolean isExplored();
 }

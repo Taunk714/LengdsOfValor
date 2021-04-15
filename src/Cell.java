@@ -1,6 +1,9 @@
 // cell interface. form the grid.
-public interface Cell<T> {
-//    void enter(T member);
+public interface Cell {
     String getColor();
     String toString();
+
+    int getRow();
+    int getCol();
+    int[] getPos();
 }

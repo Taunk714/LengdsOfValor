@@ -53,4 +53,8 @@ public class configUtil {
     public static int getConfigInt(String key){
         return Integer.parseInt(properties.getProperty(key));
     }
+
+    public static double getConfigDouble(String key){
+        return Double.parseDouble(properties.getProperty(key));
+    }
 }

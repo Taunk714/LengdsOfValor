@@ -148,7 +148,7 @@ public class Hero extends Character implements Fight{
     public void recover(){
         setHP(getHP() + maxHP/10);
         setMana(mana + maxMana/10);
-        System.out.printf("%s's HP&Mana recover. HP: %d, Mana: %d", toString(),getHP(), getMana());
+        System.out.printf("%s's HP&Mana recover. HP: %d, Mana: %d\n", toString(),getHP(), getMana());
     }
 
     @Override
@@ -388,6 +388,12 @@ public class Hero extends Character implements Fight{
 
     public void setDexterity(int dexterity) {
         this.dexterity.setValue(dexterity);
+    }
+
+    public void resetBonus(){
+        agility.resetCellBonus();
+        strength.resetCellBonus();
+        dexterity.resetCellBonus();
     }
 
     @Override

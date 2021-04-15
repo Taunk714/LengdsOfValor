@@ -22,6 +22,16 @@ public class InaccessibleCell implements Cell{
     }
 
     @Override
+    public int getRow() {
+        return pos[0];
+    }
+
+    @Override
+    public int getCol() {
+        return pos[1];
+    }
+
+    @Override
     public String getColor() {
         return MyFont.ANSI_BACKGROUNDGREY;
     }
