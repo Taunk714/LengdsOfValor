@@ -162,6 +162,10 @@ public class Hero extends Character implements Fight{
 
     // gain exp and money after winning the battle.
     public void gainAndLevelUp(int exp, int money){
+        int preLevel = this.getLevel();
+        int preMoney = this.money;
+        int preHp = getHP();
+        int preMana = mana;
         this.exp += exp;
         this.money += money;
 //        System.out.printf("%s got $%d and %d EXP.\n", toString(), money, exp);
@@ -169,21 +173,35 @@ public class Hero extends Character implements Fight{
             this.exp = this.exp - calStdExp(getLevel());
             levelUp();
         }
-        System.out.printf("Now %s is Lv.%d and has $%d. Current HP: %d, Mana: %d, EXP: %d/%d\n",
-                toString(), getLevel(), this.money, getHP(), getMana(), getExp(), calStdExp(getLevel()));
+        System.out.printf("%s: Lv.%d -> %d, HP: %d -> %d, Mana: %d -> %d, Money: %d -> %d. Current EXP:%d/%d\n",
+                toString(),
+                preLevel,   getLevel(),
+                preHp,      getHP(),
+                preMana,    getMana(),
+                preMoney,   money,
+                getExp(),   calStdExp(getLevel()));
     }
 
     // all attributes level up
     private void levelUp(){
-        setLevel(getLevel()+1);
-        maxHP = getLevel() * 100;
+        int preLevel = getLevel();
+        setLevel(preLevel+1);
+        maxHP = preLevel * 100;
         maxMana *= 1.1;
         setHP(maxHP);
+        int preAgility = agility.getPlainValue();
+        int preDexterity = dexterity.getPlainValue();
+        int preStrength = strength.getPlainValue();
         agility.levelUp();
         dexterity.levelUp();
         strength.levelUp();
-        System.out.printf("%s level up! Level: %d, Strength: %d, Agility: % d, Dexterity: %d\n",
-                toString(), getLevel(), strength.getValue(), agility.getValue(), dexterity.getValue());
+        System.out.printf("%sCongratulation! %s%s level up! Lv: %d -> %d, Strength: %d -> %d, Agility: %d -> %d, Dexterity: %d -> %d%s\n",
+                MyFont.ANSI_YELLOW, MyFont.ANSI_BOLD,
+                toString(), preLevel, getLevel(),
+                preStrength,  strength.getPlainValue(),
+                preAgility,   agility.getPlainValue(),
+                preDexterity, dexterity.getPlainValue(),
+                MyFont.ANSI_RESET);
     }
 
     // calculate the exp upperbound of a certain level.
@@ -411,6 +429,6 @@ public class Hero extends Character implements Fight{
     }
 
     public String mark(){
-        return "◢◣ ";
+        return "◢H◣";
     }
 }

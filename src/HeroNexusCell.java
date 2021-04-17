@@ -15,7 +15,6 @@ public class HeroNexusCell extends NexusCell<Hero>{
         System.out.printf("%s enter the HeroNexusCell!\n",member);
         System.out.println("""
                 Welcome to the SUPER LEGEND MARKET!
-                \u001B[3mWhen one of the heroes want to sell/buy, first choose sell/buy, then choose the hero.\u001B[0m
                 Enter q to leave the market! Enter any other key to enter the market...""");
 
 //        Scanner scanner = new Scanner(System.in);

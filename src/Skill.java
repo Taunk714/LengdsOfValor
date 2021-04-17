@@ -42,6 +42,10 @@ public class Skill {
         return (int) (value * cellBonus);
     }
 
+    public int getPlainValue() {
+        return value;
+    }
+
     public void setValue(int value) {
         this.value = value;
     }

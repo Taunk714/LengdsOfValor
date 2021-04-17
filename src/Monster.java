@@ -79,20 +79,6 @@ public class Monster extends Character implements Fight{
     }
 
 
-//    public void effect(String type){
-//        switch (type){
-//            case "FireSpell"->{
-//                damageDebuff *= 0.9;
-//            }
-//            case "IceSpell"->{
-//                defenseDebuff *= 0.9;
-//            }
-//            case "LightningSpell"->{
-//                dcDebuff *= 0.9;
-//            }
-//        }
-//    }
-
     @Override
     public String toString() {
         return MyFont.ANSI_PURPLE + type + " " + getName() + MyFont.ANSI_RESET;
@@ -113,12 +99,10 @@ public class Monster extends Character implements Fight{
     }
 
     @Override
-    public void gainAndLevelUp(int exp, int money) {
-
-    }
+    public void gainAndLevelUp(int exp, int money) {}
 
     @Override
     public String mark() {
-        return " ◥◤";
+        return "◥M◤";
     }
 }

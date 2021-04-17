@@ -14,7 +14,6 @@ public class LOVGame implements RpgGame {
     private LOVMonsterTeam monsters = new LOVMonsterTeam();
 
     private int round = 0;
-    private boolean isWin = false;
 
     private HashSet<Integer> heroIds = new HashSet<>();
     private int isDead = 0;
@@ -38,7 +37,7 @@ public class LOVGame implements RpgGame {
             target.setPos(lovGrid.getSize()-1, i * 3 + randomUtil.nextInt(2));
             ((AccessibleCell)lovGrid.getCell(target.getPos())).setHero(target);
             heroes.setMember(i, target);
-            System.out.printf("%s joins the team!\n", target.toString());
+            System.out.printf("%s joins the team!\n\n", target.toString());
         }
 //        generateNewMonster();
     }
@@ -57,7 +56,7 @@ public class LOVGame implements RpgGame {
 
             for (Hero hero : heroes) {
                 while(true){
-                    printMap();
+                    printMap(hero);
                     int[] pos = hero.getPos().clone();
                     String next = askMovement(hero);
 
@@ -99,33 +98,34 @@ public class LOVGame implements RpgGame {
                 }
                 hero.recover();
                 if (hero.getPos()[0] == 0){
-                    isWin = true;
+                    System.out.println("Hero team reach the opponents' Nexus Cell. Hero team wins!");
+                    printMap(hero);
+                    printEndGame();
+                    return;
                 }
             }
 
             // monster movement
             for (Monster monster : monsters) {
-                Hero target = getNearByHero(monster);
+                Hero target = getNearByHeroOrNull(monster);
                 if (target != null){
                     monster.attack(target);
+                    if(target.getHP()<=0){
+                        System.out.printf("%s%s is faint, go back to Nexus Cell.\n",MyFont.ANSI_RED+MyFont.ANSI_BOLD, target);
+                        int line = target.getPos()[1];
+                        target.revive(true);
+                        lovGrid.enter(target, new int[]{lovGrid.getSize()-1, line});
+                    }
                 }else{
                     int[] pos = monster.getPos().clone();
                     pos[0]++;
                     lovGrid.enter(monster, pos);
                 }
 
-                if (monster.getPos()[0] == lovGrid.getSize()-1 && isWin){
-                    System.out.println("Both hero & monster team reach the opponents' Nexus Cell! It's a tie!");
-                    printEndGame();
-                    break;
-                }else if (monster.getPos()[0] != lovGrid.getSize()-1 && isWin){
-                    System.out.println("Hero team reach the opponents' Nexus Cell. Hero team wins!");
-                    printEndGame();
-                    break;
-                }else if (monster.getPos()[0] == lovGrid.getSize()-1 && !isWin){
+                if (monster.getPos()[0] == lovGrid.getSize()-1){
                     System.out.println("Monster team reach the opponents' Nexus Cell. Monster team wins...");
                     printEndGame();
-                    break;
+                    return;
                 }
             }
 
@@ -137,11 +137,11 @@ public class LOVGame implements RpgGame {
     private String askMovement(Hero hero){
         System.out.printf("Decide %s's next movement!(%s is in lane %s, row %d, col %d)\n",
                 hero, hero, laneList[hero.getPos()[1]/3], hero.getPos()[0], hero.getPos()[1]);
-        String pattern = "[wsdqiWSDQIbBtT";
+        String pattern = "[sdqiaASDQIbBtT";
         if (hasSameLineMonster(hero)){
             System.out.print(MyFont.ANSI_DELETE);
         }else {
-            pattern = pattern + "aA";
+            pattern = pattern + "wW";
         }
         System.out.println("W/w: move up");
         System.out.print(MyFont.ANSI_RESET);
@@ -154,45 +154,27 @@ public class LOVGame implements RpgGame {
                 B/b: back to Nexus Cell
                 """);
 
-        int available = -1;
+        int available = 0;
         if (hasNearByMonster(hero)) {
             available = howToAttackInBattle(hero);
         }
 
-        { //
-            if (!hero.getBag().hasItem("Potions")){
-                System.out.print(MyFont.ANSI_DELETE);
-                System.out.print("3: use a potion. ");
-                System.out.print(MyFont.ANSI_RESET);
-                System.out.println(MyFont.ANSI_ITALIC+ MyFont.ANSI_GREY + hero.getType() + " " +
-                        hero.getName() + " has no potion in the bag." + MyFont.ANSI_RESET);
-            }else {
-                System.out.println("3: use a potion. ");
-                available = available * 10 + 3;
-            }
 
-            if (!hero.getBag().hasItem("Armory")){
-                System.out.print(MyFont.ANSI_DELETE);
-                System.out.print("4: change your armor. ");
-                System.out.print(MyFont.ANSI_RESET);
-                System.out.println(MyFont.ANSI_ITALIC+ MyFont.ANSI_GREY + hero.getType() + " " +
-                        hero.getName() + " has no armor in the bag." + MyFont.ANSI_RESET);
-            }else {
-                System.out.println("4: change your armor. ");
-                available = available * 10 + 4;
-            }
-
-            if (!hero.getBag().hasItem("Weaponry")){
-                System.out.print(MyFont.ANSI_DELETE);
-                System.out.print("5: change your weapon. ");
-                System.out.print(MyFont.ANSI_RESET);
-                System.out.println(MyFont.ANSI_ITALIC+ MyFont.ANSI_GREY + hero.getType() + " " +
-                        hero.getName() + " has no weapon in the bag." + MyFont.ANSI_RESET);
-            }else {
-                System.out.println("5: change your weapon. ");
-                available = available * 10 + 5;
-            }
+        if (hero.getBag().hasItem("Potions")){
+            System.out.println("3: use a potion. ");
+            available = available * 10 + 3;
         }
+
+        if (hero.getBag().hasItem("Armory")){
+            System.out.println("4: change your armor. ");
+            available = available * 10 + 4;
+        }
+
+        if (hero.getBag().hasItem("Weaponry")){
+            System.out.println("5: change your weapon. ");
+            available = available * 10 + 5;
+        }
+
 
         System.out.print("\n");
 
@@ -235,15 +217,15 @@ public class LOVGame implements RpgGame {
         return false;
     }
 
-    private Hero getNearByHero(Monster monster){
+    private Hero getNearByHeroOrNull(Monster monster){
 
         int[] pos = monster.getPos();
         for (int i = 0; i < 2; i++) {
             for (int j = 0; j < 3; j++) {
-                if (pos[0]-i < 0 || pos[1]+j-1 < 0 || pos[1]+j-1 > lovGrid.getSize()-1){
+                if (pos[0]+i < 0 || pos[1]+j-1 < 0 || pos[1]+j-1 > lovGrid.getSize()-1){
                     continue;
                 }
-                Cell cell = lovGrid.getCell(pos[0]-i, pos[1]+j-1);
+                Cell cell = lovGrid.getCell(pos[0]+i, pos[1]+j-1);
                 if (cell instanceof AccessibleCell && ((AccessibleCell) cell).getHero()!= null){
                     return ((AccessibleCell) cell).getHero();
                 }
@@ -318,8 +300,13 @@ public class LOVGame implements RpgGame {
             Monster target = targets.get(index);
             hero.attack(target, ans);
             if (isTargetDead(target)){
-                System.out.printf("Monster %s is dead! You are close to victory!\n", target.getName());
+                hero.gainAndLevelUp(target.getLevel()+2, hero.getLevel()*100);
+
+                System.out.print("You are close to victory!\n");
                 monsters.removeDead(target);
+                int [] monsterPos = target.getPos();
+                ((AccessibleCell<Character>)lovGrid.getCell(monsterPos)).setMonsterNull();
+
             }
         }else{
             hero.attack(null, ans);
@@ -424,10 +411,10 @@ public class LOVGame implements RpgGame {
             try {
                 String s = scannerUtil.readLine();
                 int ans = Integer.parseInt(s);
-                if(Integer.parseInt(s) >= monsterRow * 10){
-                    Cell cell = lovGrid.getCell(ans/10, laneId * 3 + ans%10);
+                if(ans >= monsterRow * 10 && ans % 10 >= (laneId-1) * 3 && ans % 10 < laneId * 3){
+                    Cell cell = lovGrid.getCell(ans/10, ans%10);
                     if (((AccessibleCell<Character>) cell).isExplored()){
-                        lovGrid.enter(hero, new int[]{ans/10, laneId * 3 + ans%10});
+                        lovGrid.enter(hero, new int[]{ans/10, ans%10});
                         break;
                     }else{
                         System.out.println("Please enter the correct number.");
@@ -449,6 +436,7 @@ public class LOVGame implements RpgGame {
             for (int j = 0; j < size; j++) {
                 Cell cell = lovGrid.getCell(j,laneStart);
                 if (((AccessibleCell)cell).getMonster() != null){
+                    max = cell.getRow();
                     max = cell.getRow();
                     break;
                 }
@@ -567,7 +555,7 @@ public class LOVGame implements RpgGame {
                 0, "Type", "Name","Lv","HP","Defense", "Damage");
     }
 
-    public void printMap(){
+    public void printMap(Character target){
         StringBuilder s = new StringBuilder();
         int size = lovGrid.getSize();
 //        int[] heroPos = heroes.getPos();
@@ -587,7 +575,11 @@ public class LOVGame implements RpgGame {
                     }
 
                     if (((AccessibleCell<?>) cell).getHero()!=null){
-                        s.append(((AccessibleCell<?>) cell).getHero().mark());
+                        Hero hero = ((AccessibleCell<?>) cell).getHero();
+                        if (target != null && hero == target){
+                            s.append(MyFont.ANSI_RED).append(MyFont.ANSI_BOLD);
+                        }
+                        s.append(hero.mark()).append(MyFont.ANSI_RESET);
                     }else {
                         s.append(cell.toString());
                     }
@@ -602,6 +594,10 @@ public class LOVGame implements RpgGame {
         s.append("+------".repeat(Math.max(0, size)));
         s.append("+");
         System.out.println(s);
+    }
+
+    public void printMap(){
+        printMap(null);
     }
 
     private void printLane(int laneId, int monsterRow){

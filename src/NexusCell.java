@@ -7,6 +7,6 @@ public class NexusCell<T extends Character> extends PlainCell<T>{
 
     @Override
     public String getColor() {
-        return MyFont.ANSI_BACKGROUNDRED;
+        return MyFont.ANSI_BACKGROUNDPURPLE;
     }
 }

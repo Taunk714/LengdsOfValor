@@ -15,7 +15,7 @@ public class configUtil {
     public static void readConfig(){
         properties = new Properties();
         try {
-            properties.load(new FileInputStream("src/config.properties"));
+            properties.load(new FileInputStream("./src/config.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }

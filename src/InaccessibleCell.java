@@ -7,11 +7,6 @@ public class InaccessibleCell implements Cell{
         pos[1] = col;
     }
 
-//    @Override
-//    public void enter(T heroes) {
-//        System.out.println("You can't go here. It's inaccessible.");
-//    }
-
     public int[] getPos() {
         return pos;
     }
