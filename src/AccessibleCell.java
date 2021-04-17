@@ -1,4 +1,4 @@
-public interface AccessibleCell<T> {
+public interface AccessibleCell<T extends MovingUnit> {
     void setCharacter(Character character);
     Hero getHero();
     Monster getMonster();

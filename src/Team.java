@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.List;
 
 // The unit during the game.
-public class Team<T extends Character> implements Iterable<T>{
+public class Team<T extends Character> implements Iterable<T>, MovingUnit{
     private List<T> members;
     private int teamSize;
     private int currSize = 0;

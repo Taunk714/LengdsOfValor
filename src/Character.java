@@ -1,5 +1,5 @@
 // Abstract game.Character class.
-public abstract class Character implements Tablefiable {
+public abstract class Character implements Tablefiable, MovingUnit {
     private int level = 1;
     private String name;
     private int HP;
