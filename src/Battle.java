@@ -93,11 +93,13 @@ public class Battle {
                 }else if (ans.equalsIgnoreCase("i")){
                     Legends.getInstance().showInfo();
                 }else if (monsters[Integer.parseInt(ans)].getHP() <= 0){
+                    SoundPlayUtil.playError();
                     System.out.println("You should choose a alive target.");
                 }else {
                     return Integer.parseInt(ans);
                 }
             } catch (NoSuchElementException e) {
+                SoundPlayUtil.playError();
                 System.out.println("Please input the corresponding number.");
             }
         }

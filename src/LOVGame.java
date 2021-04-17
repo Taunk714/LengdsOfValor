@@ -27,6 +27,7 @@ public class LOVGame implements RpgGame {
     }
 
     private LOVGame(){
+        SoundPlayUtil.playGameStart();
         printInitWords();
         lovGrid = new LOVGrid();
         heroes = new LOVHeroTeam(heroNum);
@@ -37,6 +38,7 @@ public class LOVGame implements RpgGame {
             target.setPos(lovGrid.getSize()-1, i * 3 + randomUtil.nextInt(2));
             ((AccessibleCell)lovGrid.getCell(target.getPos())).setHero(target);
             heroes.setMember(i, target);
+            SoundPlayUtil.playJoinTeam();
             System.out.printf("%s joins the team!\n\n", target.toString());
         }
 //        generateNewMonster();
@@ -44,6 +46,7 @@ public class LOVGame implements RpgGame {
 
     @Override
     public void start() throws InterruptedException {
+        SoundPlayUtil.playGoIntoMap();
         for (Hero hero : heroes) {
             System.out.println("Starting From Nexus cell! Come and Buy your first Item!");
             lovGrid.enter(hero, hero.getPos());
@@ -92,12 +95,14 @@ public class LOVGame implements RpgGame {
                             lovGrid.enter(hero, pos);
                             break;
                         } catch (ArrayIndexOutOfBoundsException e) {
+                            SoundPlayUtil.playError();
                             System.out.println(MyFont.ANSI_RED + "Sorry you can't go there, it is out of the playing area." + MyFont.ANSI_RESET);
                         }
                     }
                 }
                 hero.recover();
                 if (hero.getPos()[0] == 0){
+                    SoundPlayUtil.playWin();
                     System.out.println("Hero team reach the opponents' Nexus Cell. Hero team wins!");
                     printMap(hero);
                     printEndGame();
@@ -123,6 +128,7 @@ public class LOVGame implements RpgGame {
                 }
 
                 if (monster.getPos()[0] == lovGrid.getSize()-1){
+                    SoundPlayUtil.playLose();
                     System.out.println("Monster team reach the opponents' Nexus Cell. Monster team wins...");
                     printEndGame();
                     return;
@@ -190,9 +196,12 @@ public class LOVGame implements RpgGame {
         }
         while(true){
             try {
+//                return scannerUtil.readLine(pattern);
                 Scanner scanner = new Scanner(System.in);
-                return scanner.next(Pattern.compile(pattern)).toLowerCase();
+//                SoundPlayUtil.playInput();
+                return scanner.next(pattern).toLowerCase();
             } catch (NoSuchElementException e) {
+                SoundPlayUtil.playError();
                 System.out.println("Sorry, you can only enter the letter above:");
             }
         }
@@ -286,6 +295,7 @@ public class LOVGame implements RpgGame {
                 }
                 return available;
             } catch (Exception e){
+                SoundPlayUtil.playError();
                 System.out.println("Please enter correct number:");
             }
         }
@@ -362,11 +372,13 @@ public class LOVGame implements RpgGame {
                 }else if (ans.equalsIgnoreCase("i")){
                     Legends.getInstance().showInfo();
                 }else if (monsters.get(Integer.parseInt(ans)).getHP() <= 0){
+                    SoundPlayUtil.playError();
                     System.out.println("You should choose a alive target.");
                 }else {
                     return Integer.parseInt(ans);
                 }
             } catch (NoSuchElementException e) {
+                SoundPlayUtil.playError();
                 System.out.println("Please input the corresponding number.");
             }
         }
@@ -396,6 +408,7 @@ public class LOVGame implements RpgGame {
                 String s = scanner.next("["+available+"]");
                 return Integer.parseInt(s) - 1;
             }catch (Exception e){
+                SoundPlayUtil.playError();
                 System.out.println("Please choose an available lane.");
             }
         }
@@ -409,20 +422,24 @@ public class LOVGame implements RpgGame {
                 MyFont.ANSI_RED+"Input instruction: if map shows: "+MyFont.ANSI_BOLD + "6,7, please enter 67"+MyFont.ANSI_RESET);
         while (true){
             try {
-                String s = scannerUtil.readLine();
-                int ans = Integer.parseInt(s);
+//                String s = scannerUtil.readLine();
+                int ans = scannerUtil.readInt();
                 if(ans >= monsterRow * 10 && ans % 10 >= (laneId-1) * 3 && ans % 10 < laneId * 3){
                     Cell cell = lovGrid.getCell(ans/10, ans%10);
                     if (((AccessibleCell<Character>) cell).isExplored()){
+                        SoundPlayUtil.playTeleport();
                         lovGrid.enter(hero, new int[]{ans/10, ans%10});
                         break;
                     }else{
+                        SoundPlayUtil.playError();
                         System.out.println("Please enter the correct number.");
                     }
                 }else{
+                    SoundPlayUtil.playError();
                     System.out.println("Please enter the correct number.");
                 }
             }catch (Exception e){
+                SoundPlayUtil.playError();
                 System.out.println("Please enter the correct number.");
             }
         }
@@ -458,8 +475,8 @@ public class LOVGame implements RpgGame {
         int index;
         while (true){
             try{
-                Scanner scanner = new Scanner(System.in);
-                index = scanner.nextInt();
+//                Scanner scanner = new Scanner(System.in);
+                index = scannerUtil.readInt();
                 occupation = occupationList[index-1];
                 break;
             }catch (InputMismatchException e){
@@ -512,13 +529,14 @@ public class LOVGame implements RpgGame {
                 
                 \u001B[1mYou can enter m,i or q to show map, show info or quit the game at any time.\u001B[0m
                 Now! Choose your game settings and begin your adventure!
-                
+                 \u001B[1m\u001B[31mAfter an attack, you will see the battle info, press enter to continue.
+                 After an attack, you will see the battle info, press enter to continue.
+                 After an attack, you will see the battle info, press enter to continue.\u001B[0m
                 """);
     }
 
     // initializing the hero.
     private Hero initHero(int occId){
-//        String[][] target = null;
         String occName = occupationList[occId];
 
         heroCreator.showOccInfo(occName);
@@ -527,8 +545,8 @@ public class LOVGame implements RpgGame {
         int index;
         while (true){
             try{
-                Scanner scanner = new Scanner(System.in);
-                index = scanner.nextInt();
+//                Scanner scanner = new Scanner(System.in);
+                index = scannerUtil.readInt();
                 if (heroIds.contains(occId * 10 + index)){
                     System.out.println("This hero has already been chosen. Please choose another hero.");
                 }else if (index >= 0 && index < heroCreator.getHeroNum(occName)){

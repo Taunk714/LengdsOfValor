@@ -13,6 +13,7 @@ public class PlainCell<T extends Character> implements Cell, AccessibleCell<T> {
 
     @Override
     public void enter(T member) {
+        SoundPlayUtil.playEnterCell();
         if (member instanceof Hero){
             ((Hero) member).resetBonus();
             setHero((Hero) member);

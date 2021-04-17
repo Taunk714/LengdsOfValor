@@ -11,22 +11,15 @@ public class scannerUtil {
         sc = new Scanner(System.in);
     }
 
-    // public static String readLine(){
-    //     return sc.nextLine();
-    // }
-
-    /**
-     * @param instruction
-     * @return user's integer input 
-     */
-    public static int readInt(String instruction){
-        Integer num;
+    public static int readInt(){
+//        SoundPlayUtil.playInput();
+        int num;
         while(true){
-            printUtil.printYellow(instruction);
             String input = sc.nextLine();
             try{
                 num = Integer.parseInt(input);
             }catch(NumberFormatException e){
+                SoundPlayUtil.playError();
                 printUtil.printRed("Please enter a valid integer!");
                 continue;
             }
@@ -36,12 +29,15 @@ public class scannerUtil {
     }
 
     public static String readLine(){
+//        SoundPlayUtil.playInput();
         return sc.nextLine().trim();
     }
 
-    public static String readLine(String s){
-        printUtil.printYellowSign(s);
-        return sc.nextLine().trim();
+    public static String readLine(String pattern){
+//        SoundPlayUtil.playInput();
+        String s = sc.next(pattern);
+        sc.nextLine();
+        return s.trim();
     }
     
 }

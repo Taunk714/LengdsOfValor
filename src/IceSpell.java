@@ -4,6 +4,12 @@ public class IceSpell extends Spell{
         setType("IceSpells");
     }
 
+    @Override
+    public void use() {
+        super.use();
+        SoundPlayUtil.playIceSpell();
+    }
+
     protected void effect(Monster target){
         target.defenseDebuff();
     }

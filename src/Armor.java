@@ -10,6 +10,7 @@ public class Armor extends Item {
 
     @Override
     public void use() {
+        SoundPlayUtil.playArmor();
         if (getHero().getArmor() != null){
             System.out.printf("%s put off %s and put on %s.\n",
                     getHero().toString(), getHero().showArmorWorn(), getName());

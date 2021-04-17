@@ -53,14 +53,17 @@ public class Hero extends Character implements Fight{
         System.out.printf("Enter the %s you want to use\n", type);
         while (true){
             try{
-                Scanner scanner = new Scanner(System.in);
-                id = scanner.nextInt();
+//                Scanner scanner = new Scanner(System.in);
+//                id = scanner.nextInt();
+                id = scannerUtil.readInt();
                 if (id< 0 || id > size-1){
+                    SoundPlayUtil.playError();
                     System.out.println("Please enter 0 to "+ (size-1)+":");
                 }else {
                     break;
                 }
             }catch (InputMismatchException e){
+                SoundPlayUtil.playError();
                 System.out.println("Please enter 0 to "+ (size - 1)+":");
             }
         }
@@ -79,6 +82,7 @@ public class Hero extends Character implements Fight{
             try{
                 Scanner scanner = new Scanner(System.in);
                 ans = scanner.next("[0-"+(size-1)+"mqi]");
+//                ans = scannerUtil.readLine("[0-"+(size-1)+"mqi]");
                 if (ans.equalsIgnoreCase("i")){
                     LOVGame.getInstance().showInfo();
                 }else if (ans.equalsIgnoreCase("m")){
@@ -91,6 +95,7 @@ public class Hero extends Character implements Fight{
                     break;
                 }
             }catch (InputMismatchException e){
+                SoundPlayUtil.playError();
                 System.out.println("Please enter 0 to "+ (size - 1)+":");
             }
         }
@@ -184,6 +189,7 @@ public class Hero extends Character implements Fight{
 
     // all attributes level up
     private void levelUp(){
+        SoundPlayUtil.playLevelUp();
         int preLevel = getLevel();
         setLevel(preLevel+1);
         maxHP = preLevel * 100;
@@ -268,9 +274,11 @@ public class Hero extends Character implements Fight{
 
                 int id = 0;
                 try {
-                    Scanner scanner = new Scanner(System.in);
-                    id = Integer.parseInt(scanner.next("[01]"));
+//                    Scanner scanner = new Scanner(System.in);
+//                    id = Integer.parseInt(scanner.next("[01]"));
+                    id = Integer.parseInt(scannerUtil.readLine("[01]"));
                 }catch (NoSuchElementException e){
+                    SoundPlayUtil.playError();
                     System.out.println("Bad Input. Use the default value 0.");
                 }
                 System.out.printf("Put down %s and take %s! Now hold %s and %s\n",
@@ -312,6 +320,11 @@ public class Hero extends Character implements Fight{
         switch (attackWay){
             case 1 ->{ // regular attack
                 int damage = strength.getValue();
+                if (weapons.size()>0){
+                    SoundPlayUtil.playHeroAttackSword();
+                }else{
+                    SoundPlayUtil.playHeroAttackNormal();
+                }
                 for (int i = 0; i < weapons.size(); i++) {
                     damage += weapons.get(i).getDamage();
                 }
@@ -345,14 +358,17 @@ public class Hero extends Character implements Fight{
     public void hurt(int damage){
 //        Random rnd = new Random();
         if (randomUtil.nextInt(100000) < agility.getValue() * 2){
+            SoundPlayUtil.playAttackMiss();
             System.out.println("Miss!ヽ(ﾟ∀ﾟ)ﾒ(ﾟ∀ﾟ)ﾉ\n");
         }else{
+            SoundPlayUtil.playHeroHurt();
             int d = (damage - getArmorBuff()/2)/3;
             setHP(getHP()-Math.max(0, d));
             System.out.printf("%s's HP -%d. Current HP: %d\n\n" , toString(),Math.max(0, d), getHP());
             if (getHP() <= 0){
                 System.out.println(MyFont.ANSI_RED + MyFont.ANSI_BOLD + getName() +  " died." + MyFont.ANSI_RESET);
             }
+            scannerUtil.readLine();
         }
     }
 

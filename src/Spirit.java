@@ -3,4 +3,9 @@ public class Spirit extends Monster{
         super(monsterData);
         setType("Spirit");
     }
+
+    @Override
+    public void playHurt() {
+        SoundPlayUtil.playSpiritHurt();
+    }
 }

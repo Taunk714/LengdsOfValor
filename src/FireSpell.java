@@ -4,6 +4,12 @@ public class FireSpell extends Spell{
         setType("FireSpells");
     }
 
+    @Override
+    public void use() {
+        super.use();
+        SoundPlayUtil.playFireSpell();
+    }
+
     protected void effect(Monster target){
         target.damageDebuff();
     }

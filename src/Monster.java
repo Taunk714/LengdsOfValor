@@ -45,6 +45,7 @@ public class Monster extends Character implements Fight{
 
     public void attack(Hero target) {
         int finalDamage = damage * damageDebuff;
+        SoundPlayUtil.playMonsterAttack();
         System.out.printf("%s attacks %s! \n%s╰（‵□′）╯ =======> (눈_눈)%s\n",
                 toString(), target.toString(), MyFont.ANSI_BACKGROUNDWHITE, MyFont.ANSI_RESET);
         target.hurt(finalDamage);
@@ -54,15 +55,23 @@ public class Monster extends Character implements Fight{
     public void hurt(int damage){
 //        Random rnd = new Random();
         if (randomUtil.nextInt(100) < dodgeChance * dcDebuff){
+            SoundPlayUtil.playAttackMiss();
             System.out.println("Miss!ヽ(ﾟ∀ﾟ)ﾒ(ﾟ∀ﾟ)ﾉ");
         }else{
+            playHurt();
             int d = (int) ((damage - defense*defenseDebuff)*0.5);
             setHP(getHP()-d);
             System.out.printf("%s 's HP -%s. Current HP: %d\n\n", toString(),d, getHP());
             if (getHP() <= 0){
+                SoundPlayUtil.playMonsterDead();
                 System.out.println(MyFont.ANSI_RED + MyFont.ANSI_BOLD + toString() +  " died."+MyFont.ANSI_RESET);
             }
         }
+        scannerUtil.readLine();
+    }
+
+    public void playHurt(){
+        SoundPlayUtil.playMonsterHurt();
     }
 
     public void damageDebuff(){

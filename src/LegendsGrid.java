@@ -26,13 +26,16 @@ public class LegendsGrid implements Grid<Team<Hero>>{
         int gridUpper = configUtil.getConfigInt("gridUpper");
         try {
             System.out.printf("Please enter the size of playing area[%d-%d]\n", gridLower, gridUpper);
-            Scanner scanner = new Scanner(System.in);
-            size = scanner.nextInt();
+//            Scanner scanner = new Scanner(System.in);
+//            size = scanner.nextInt();
+            size = scannerUtil.readInt();
             if (size < gridLower|| size > gridUpper){
+                SoundPlayUtil.playError();
                 System.out.printf("Out of Boundary. Choose %d automatically.\n\n", gridDefault);
                 size = gridDefault;
             }
         }catch (InputMismatchException e){
+            SoundPlayUtil.playError();
             System.out.printf("Input Mismatch. Choose %d automatically.\n\n", gridDefault);
             size = gridDefault;
         }

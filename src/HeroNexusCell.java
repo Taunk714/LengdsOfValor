@@ -33,7 +33,6 @@ public class HeroNexusCell extends NexusCell<Hero>{
                 case 1->{ // buy
                     buy(member);
 
-
                 }
                 case 2-> { // sell
                     if (member.getBag().getUsed() > 0){
@@ -79,12 +78,16 @@ public class HeroNexusCell extends NexusCell<Hero>{
 
                     while (true){
                         try {
-                            Scanner scanner1 = new Scanner(System.in);
-                            buy(heroes.getMember(scanner1.nextInt()));
+//                            Scanner scanner1 = new Scanner(System.in);
+//                            buy(heroes.getMember(scanner1.nextInt()));
+                            int id = scannerUtil.readInt();
+                            buy(heroes.getMember(id));
                             break;
                         }catch (InputMismatchException e){
+                            SoundPlayUtil.playError();
                             System.out.println("Incorrect format! You should enter a number. Please enter 0 to " + (heroes.getTeamSize()-1));
                         }catch (IndexOutOfBoundsException e){
+                            SoundPlayUtil.playError();
                             System.out.println("Input out of bounds! Please enter 0 to " + (heroes.getTeamSize()-1));
                         }
                     }
@@ -108,12 +111,16 @@ public class HeroNexusCell extends NexusCell<Hero>{
 
                     while (true) {
                         try {
-                            Scanner scanner1 = new Scanner(System.in);
-                            sell(heroes.getMember(scanner1.nextInt()));
+//                            Scanner scanner1 = new Scanner(System.in);
+//                            sell(heroes.getMember(scanner1.nextInt()));
+                            int id = scannerUtil.readInt();
+                            sell(heroes.getMember(id));
                             break;
                         } catch (InputMismatchException e) {
+                            SoundPlayUtil.playError();
                             System.out.println("Incorrect format! You should enter a number. Please enter 1 to " + heroes.getTeamSize());
                         } catch (IndexOutOfBoundsException e) {
+                            SoundPlayUtil.playError();
                             System.out.println("Input out of bounds! Please enter 1 to " + heroes.getTeamSize());
                         }
                     }
@@ -126,7 +133,7 @@ public class HeroNexusCell extends NexusCell<Hero>{
     private int askBuyOrSell(){
 
         String id;
-        Scanner scanner = new Scanner(System.in);
+//        Scanner scanner = new Scanner(System.in);
         while (true){
             try {
                 System.out.println("Want to buy or sell?");
@@ -136,6 +143,7 @@ public class HeroNexusCell extends NexusCell<Hero>{
                 System.out.println("m: show the map");
                 System.out.println("q: quit the game");
                 System.out.println("i: show information");
+                Scanner scanner = new Scanner(System.in);
                 id = scanner.next("[012qmi]");
                 if (id.equalsIgnoreCase("q")){
                     LOVGame.getInstance().printEndGame();
@@ -148,8 +156,9 @@ public class HeroNexusCell extends NexusCell<Hero>{
                     return Integer.parseInt(id);
                 }
             }catch (InputMismatchException e){
+                SoundPlayUtil.playError();
                 System.out.println("Incorrect format! Please enter 1, 2 or 0.");
-                scanner.nextLine();
+//                scanner.nextLine();
             }
         }
     }
@@ -183,6 +192,7 @@ public class HeroNexusCell extends NexusCell<Hero>{
                 if (val >= 0 && val < ItemCreator.getTotalSize()){
                     itemInfo = ItemCreator.getItemInfo(val);
                 }else{
+                    SoundPlayUtil.playError();
                     System.out.println("Out of bounds.");
                     continue;
                 }
@@ -192,6 +202,7 @@ public class HeroNexusCell extends NexusCell<Hero>{
                         " want to buy it? Enter y/Y to buy, enter other letter to cancel:");
                 String ans = scanner.nextLine();
                 if ("y".equalsIgnoreCase(ans)){
+                    SoundPlayUtil.playBuyOrSell();
                     hero.buyItem(ItemCreator.createItem(val));
                 }else if (id.equalsIgnoreCase("i")){
                     Legends.getInstance().showInfo();
@@ -208,12 +219,15 @@ public class HeroNexusCell extends NexusCell<Hero>{
                 System.out.println("\n");
                 break;
             }catch (InputMismatchException e){
+                SoundPlayUtil.playError();
                 System.out.println("Incorrect format! Please enter a number:");
                 scanner.nextLine();
             }catch (IndexOutOfBoundsException e) {
+                SoundPlayUtil.playError();
                 System.out.println("Out of bounds. Please enter 0 to " + (ItemCreator.getTotalSize() - 1));
                 scanner.nextLine();
             }catch (NumberFormatException e){
+                SoundPlayUtil.playError();
                 System.out.println("Incorrect format! Please enter a number:");
             }
         }
@@ -222,6 +236,7 @@ public class HeroNexusCell extends NexusCell<Hero>{
     // sell item
     public void sell(Hero hero){
         if (hero.getBag().getUsed() == 0){
+            SoundPlayUtil.playError();
             System.out.printf("Sorry %s doesn't have items to sell", hero.toString());
         }
         System.out.println("Here are the items "+ hero.getName() + " have:");
@@ -238,6 +253,7 @@ public class HeroNexusCell extends NexusCell<Hero>{
                         ", do you want to sell it? Enter y/Y to sell, enter other letter to cancel:");
                 String ans = scanner.nextLine();
                 if ("y".equals(ans.toLowerCase())){
+                    SoundPlayUtil.playBuyOrSell();
                     hero.sellItem(item);
                     System.out.println(hero.toString()+" sold the "+ item.getName() +
                             " and gain $" + item.getCost()/2 +". Now has $" + hero.getMoney());
@@ -256,9 +272,11 @@ public class HeroNexusCell extends NexusCell<Hero>{
                 System.out.println("\n");
                 break;
             }catch (InputMismatchException e){
+                SoundPlayUtil.playError();
                 System.out.println("Incorrect format! Please enter a number:");
                 scanner.nextLine();
             }catch (IndexOutOfBoundsException e){
+                SoundPlayUtil.playError();
                 System.out.println("Out of bounds. Please enter 0 to " + (hero.getItemNum()));
                 scanner.nextLine();
             }

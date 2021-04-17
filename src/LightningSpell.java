@@ -4,6 +4,12 @@ public class LightningSpell extends Spell{
         setType("LightningSpells");
     }
 
+    @Override
+    public void use() {
+        super.use();
+        SoundPlayUtil.playLightningSpell();
+    }
+
     protected void effect(Monster target){
         target.dcDebuff();
     }
