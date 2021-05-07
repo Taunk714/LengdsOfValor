@@ -205,13 +205,13 @@ public class HeroNexusCell extends NexusCell<Hero>{
                     SoundPlayUtil.playBuyOrSell();
                     hero.buyItem(ItemCreator.createItem(val));
                 }else if (id.equalsIgnoreCase("i")){
-                    Legends.getInstance().showInfo();
+                    LOVGame.getInstance().showInfo();
                     continue;
                 }else if (id.equalsIgnoreCase("m")){
-                    Legends.getInstance().printMap();
+                    LOVGame.getInstance().printMap();
                     continue;
                 }else if (id.equalsIgnoreCase("q")){
-                    Legends.getInstance().printEndGame();
+                    LOVGame.getInstance().printEndGame();
                     System.exit(-1);
                 }else {
                     System.out.println(hero.toString()+" canceled the transaction!");
@@ -258,13 +258,13 @@ public class HeroNexusCell extends NexusCell<Hero>{
                     System.out.println(hero.toString()+" sold the "+ item.getName() +
                             " and gain $" + item.getCost()/2 +". Now has $" + hero.getMoney());
                 }else if (ans.equalsIgnoreCase("i")){
-                    Legends.getInstance().showInfo();
+                    LOVGame.getInstance().showInfo();
                     continue;
                 }else if (ans.equalsIgnoreCase("m")){
-                    Legends.getInstance().printMap();
+                    LOVGame.getInstance().printMap();
                     continue;
                 }else if (ans.equalsIgnoreCase("q")){
-                    Legends.getInstance().printEndGame();
+                    LOVGame.getInstance().printEndGame();
                     System.exit(-1);
                 }else {
                     System.out.println(hero.toString()+" canceled the transaction!");

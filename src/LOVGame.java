@@ -368,9 +368,9 @@ public class LOVGame implements RpgGame {
                     printEndGame();
                     System.exit(-1);
                 }else if (ans.equalsIgnoreCase("m")) {
-                    Legends.getInstance().printMap();
+                    LOVGame.getInstance().printMap();
                 }else if (ans.equalsIgnoreCase("i")){
-                    Legends.getInstance().showInfo();
+                    LOVGame.getInstance().showInfo();
                 }else if (monsters.get(Integer.parseInt(ans)).getHP() <= 0){
                     SoundPlayUtil.playError();
                     System.out.println("You should choose a alive target.");
