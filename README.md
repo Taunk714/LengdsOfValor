@@ -97,7 +97,7 @@ before uploading because the requirement only need LOV and then you don't need t
 ## how to run
 
 - javac *.java
-- java StartGame.java
+- java StartGame
 
 ## demo
 todo...
